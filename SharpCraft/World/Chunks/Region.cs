@@ -55,17 +55,21 @@ class Region
 
     public List<Vec3<int>> CollectIndexesForGeneration(Vec3<int> center)
     {
-        List<Vec3<int>> ungenerated = [];
+        List<Vec3<int>> scheduledForGeneration = [];
         foreach (var proximityIndex in proximityIndexes)
         {
             Vec3<int> index = center + proximityIndex.Into<int>();
-            if (!chunks.TryGetValue(index, out var chunk) || chunk.State == ChunkState.Unloaded)
+            if (!chunks.TryGetValue(index, out var chunk))
             {
-                ungenerated.Add(index);
+                scheduledForGeneration.Add(index);
+            }
+            else if (chunk.IsUnloaded)
+            {
+                chunk.State = ChunkState.Ready;
             }
         }
 
-        return ungenerated;
+        return scheduledForGeneration;
     }
 
     public List<Vec3<int>> CollectIndexesForRemoval(Vec3<int> center)

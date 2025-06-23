@@ -240,6 +240,11 @@ class WorldGenerator : IDisposable
         deletionBlock = new ActionBlock<Chunk>(
         chunk =>
         {
+            if (!chunk.AllNeighborsReady)
+            {
+                return;
+            }
+
             chunkMesher.Remove(chunk.Index);
             region.RemoveChunk(chunk.Index);
 

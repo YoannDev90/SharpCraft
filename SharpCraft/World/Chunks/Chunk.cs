@@ -34,6 +34,7 @@ public class Chunk(Vec3<int> index, BlockMetadataProvider blockMetadata) : IDisp
     public ChunkState State { get; set; }
     public bool IsEmpty => palette is null;
     public bool IsReady => State == ChunkState.Ready;
+    public bool IsUnloaded => State == ChunkState.Unloaded;
 
     //Adjacent chunk references
     public Chunk XNeg { get; set; }
@@ -44,6 +45,12 @@ public class Chunk(Vec3<int> index, BlockMetadataProvider blockMetadata) : IDisp
     public Chunk ZPos { get; set; }
 
     public bool AllNeighborsExist => XNeg != null && XPos != null && YNeg != null && YPos != null && ZNeg != null && ZPos != null;
+    public bool AllNeighborsReady => (XNeg == null || XNeg.IsReady || XNeg.IsUnloaded)
+        && (XPos == null || XPos.IsReady || XPos.IsUnloaded)
+        && (YNeg == null || YNeg.IsReady || YNeg.IsUnloaded)
+        && (YPos == null || YPos.IsReady || YPos.IsUnloaded)
+        && (ZNeg == null || ZNeg.IsReady || ZNeg.IsUnloaded)
+        && (ZPos == null || ZPos.IsReady || ZPos.IsUnloaded);
 
     List<Block> palette;
     Dictionary<Block, uint> paletteIndexMap;
