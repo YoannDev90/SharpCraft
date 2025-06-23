@@ -46,7 +46,7 @@ public class GeologyGenerator
 
         switch (biome)
         {
-            case ReliefType.Plain:
+            case ReliefType.Plateau:
                 if (isSurface)
                 {
                     if (currentY >= snowLevel) return snow;
